@@ -1,48 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { apiClient } from "../apis/utils/instance";
+import TodoCard from "./TodoCard";
 
 export default function Todo() {
-  const [newTodo, setNewTodo] = useState([]);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [newTodo, setNewTodo] = useState("");
+  const [todoCard, setTodoCard] = useState([]);
+  const [toggleCompleted, setToggleCompleted] = useState(todoCard.isCompleted);
 
-  const userId = localStorage.getItem("jwt");
   const navigate = useNavigate();
-  if (!localStorage.getItem("jwt")) {
+  if (!localStorage.getItem("access_token")) {
     navigate("/signin");
   }
   const toggleIsCompleted = () => {
-    setIsCompleted((prev) => !prev);
+    setToggleCompleted((prev) => !prev);
   };
 
   const onChageNewTodo = (e) => {
     setNewTodo(e.target.value);
-    console.log(newTodo);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .post("http://localhost:8000/todos", {
-          Headers: {
-            Authorization: userId,
-            "Content-Type": "application/json",
-          },
-          // id: 1,
-          todo: newTodo,
-          // isCompleted: false,
-          // userId: userId
-        })
-        .then((res) => {
-          console.log(res.data);
-
-          setNewTodo(res.data);
-        });
-      localStorage.setItem("newtodo", newTodo);
+      const res = await apiClient.post("todos", { todo: newTodo });
+      console.log(res.data);
+      if (res.status === 201) {
+        const { id, todo, isCompleted } = res.data;
+        const brandnewTodo = { id, todo, isCompleted };
+        setTodoCard([...todoCard, brandnewTodo]);
+        setNewTodo("");
+      }
     } catch (err) {
       console.error(err);
     }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await apiClient.get("todos");
+        console.log(res);
+        setTodoCard(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    console.log(todoCard);
+    fetchData();
+  }, []);
+
+  const editedTodoFn = (newTodo) => {
+    const newTodos = todoCard.map((todo) => {
+      if (todo.id === newTodo.id) {
+        return newTodo;
+      }
+      return todo;
+    });
+    setTodoCard(newTodos);
   };
 
   return (
@@ -63,18 +78,14 @@ export default function Todo() {
         </button>
       </form>
       <ul className="mt-10 flex flex-col gap-10">
-        <li>
-          <label>
-            <input type="checkbox" checked={toggleIsCompleted} />
-            <span>TODO 1</span>
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" />
-            <span>TODO 2</span>
-          </label>
-        </li>
+        {todoCard?.map((todo) => (
+          <TodoCard
+            key={todo.id}
+            todo={todo}
+            toggleIsCompleted={toggleIsCompleted}
+            editedTodoFn={editedTodoFn}
+          />
+        ))}
       </ul>
     </div>
   );

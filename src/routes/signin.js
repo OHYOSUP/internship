@@ -18,8 +18,7 @@ export default function SignIn() {
     if (!email.includes("@")) {
       setEmailErr("이메일을 확인해주세요");
       setIsEmail(false);
-    } else {
-      setEmailErr("사용 가능한 이메일입니다");
+    } else {      
       setIsEmail(true);
     }
   };
@@ -28,8 +27,7 @@ export default function SignIn() {
     if (password.length < 8) {
       setPasswordErr("비밀번호는 8자리 이상입니다");
       setIsPassword(false);
-    } else {
-      setPasswordErr("사용 가능한 비밀번호 입니다.");
+    } else {      
       setIsPassword(true);
     }
   };
@@ -38,18 +36,18 @@ export default function SignIn() {
     try {
       await axios
         .post("http://localhost:8000/auth/signin", {
-          Headers: {
+          headers: {
             "Content-Type": "application/json",
           },
           email: email,
           password: password,
         })
         .then((res) => {
-          console.log(res.data);
-          axios.defaults.headers.common["Authorization"] = "Bearer " + res.data;
+          console.log(res.data.access_token);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${res.data}`;
           localStorage.setItem(
-            "jwt",
-            `Bearer ` + JSON.stringify(res.data).split('":"')[1]
+            "access_token",
+            `Bearer ${res.data.access_token}`
           );
           if (res.status === 200) {
             navigate("/todo");
@@ -62,7 +60,7 @@ export default function SignIn() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
+    if (localStorage.getItem("access_token")) {
       alert("이미 로그인 하셨습니다");
       navigate("/todo");
     }
@@ -99,7 +97,7 @@ export default function SignIn() {
           className="bg-[#1D9BF0] w-30 rounded-md p-4 text-white font-bold"
           disabled={!(isEmail && isPassword)}
         >
-          회원가입
+          로그인
         </button>
       </form>
     </div>

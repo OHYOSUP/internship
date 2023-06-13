@@ -55,7 +55,7 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
+    if (localStorage.getItem("access_token")) {
       alert('이미 로그인 하셨습니다')
       navigate("/todo");
     }
