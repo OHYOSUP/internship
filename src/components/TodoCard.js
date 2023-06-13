@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { apiClient } from "../apis/utils/instance";
 
-function TodoCard({ todo, editedTodoFn }) {
+function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
   const [editedTodo, setEditedTodo] = useState(todo.todo);
   const [toggleEdit, setToggleEdit] = useState(false);
 
@@ -9,11 +9,23 @@ function TodoCard({ todo, editedTodoFn }) {
     setToggleEdit((prev) => !prev);
   };
 
-  const onCheckedClick = (e) => {
+  const onCheckedClick = async (e) => {
     e.preventDefault();
-    const checked = e.target.checked;
-    console.log(checked);
+    const { id, todo: editedTodo } = todo;
+    const updatedTodo = { todo: editedTodo, isCompleted: e.target.checked };
+    try {
+      const res = await apiClient.put(`todos/${id}`, updatedTodo);
+      console.log(res.data);
+      if (res.status === 200) {
+        const { id, todo: editedTodo, isCompleted } = res.data;
+        const newTodoData = { id, todo: editedTodo, isCompleted };
+        editedTodoFn(newTodoData);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
+
   const onEditChange = (e) => {
     setEditedTodo(e.target.value);
   };
@@ -40,13 +52,16 @@ function TodoCard({ todo, editedTodoFn }) {
     setToggleEdit(false);
   };
 
+
+
+
   return (
     <li className="w-[39vw] gap-5 rounded-md flex flex-col justify-around items-center bg-slate-200 p-5">
       <div className="w-full p-3 flex justify-between gap-3 items-center">
         <input
           className="w-5 h-5"
           type="checkbox"
-          checked={todo.todo.isCompleted}
+          checked={todo.isCompleted}
           onChange={(e) => onCheckedClick(e)}
         />
         {toggleEdit ? (
@@ -73,7 +88,7 @@ function TodoCard({ todo, editedTodoFn }) {
         >
           수정
         </button>
-        <button className="bg-[#1D9BF0] w-13 rounded-md p-2 px-2 text-white font-bold">
+        <button onClick={deleteTodoFn} className="bg-[#1D9BF0] w-13 rounded-md p-2 px-2 text-white font-bold">
           삭제
         </button>
       </div>

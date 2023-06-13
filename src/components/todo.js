@@ -60,6 +60,23 @@ export default function Todo() {
     setTodoCard(newTodos);
   };
 
+  const deleteTodoFn = async (e, id)=>{    
+      e.preventDefault();      
+      try{
+        const res = await apiClient.delete(`todos/${id}`, id)
+        console.log(res.data)
+        if(res.status===204){
+          let newTodo = todoCard.filter(todo => todo.id !== id)
+          setTodoCard(newTodo)
+        }
+        
+      }catch(err){
+        console.error(err)
+      }
+      
+  
+    
+  }
   return (
     <div className="flex flex-col items-center">
       <form onSubmit={onSubmit} className="gap-5 flex w-42">
@@ -83,6 +100,7 @@ export default function Todo() {
             key={todo.id}
             todo={todo}
             toggleIsCompleted={toggleIsCompleted}
+            deleteTodoFn = {(e)=> deleteTodoFn(e, todo.id)}
             editedTodoFn={editedTodoFn}
           />
         ))}
