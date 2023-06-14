@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiClient } from "../apis/utils/instance";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export default function SignIn() {
     if (!email.includes("@")) {
       setEmailErr("이메일을 확인해주세요");
       setIsEmail(false);
-    } else {      
+    } else {
       setIsEmail(true);
     }
   };
@@ -27,35 +28,28 @@ export default function SignIn() {
     if (password.length < 8) {
       setPasswordErr("비밀번호는 8자리 이상입니다");
       setIsPassword(false);
-    } else {      
+    } else {
       setIsPassword(true);
     }
   };
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .post("http://localhost:8000/auth/signin", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          email: email,
-          password: password,
-        })
-        .then((res) => {
-          console.log(res.data.access_token);
-          axios.defaults.headers.common["Authorization"] = `Bearer ${res.data}`;
-          localStorage.setItem(
-            "access_token",
-            `Bearer ${res.data.access_token}`
-          );
-          if (res.status === 200) {
-            navigate("/todo");
-          }
-          return res.data;
-        });
+      const res = await apiClient.post("auth/signin", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        email: email,
+        password: password,
+      });
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data}`;
+      localStorage.setItem("access_token", `Bearer ${res.data.access_token}`);
+      if (res.status === 200) {
+        navigate("/todo");
+      }
+      return res.data;
     } catch (err) {
-      console.error(err);      
+      console.error(err);
     }
   };
 

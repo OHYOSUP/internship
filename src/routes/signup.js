@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiClient } from "../apis/utils/instance";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -37,26 +38,22 @@ export default function SignUp() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .post("http://localhost:8000/auth/signup", {
-          email: email,
-          password: password,
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.status === 201) {
-            navigate("/signin");
-          }
-        });
+      const res = await apiClient.post("auth/signup", {
+        email: email,
+        password: password,
+      });
+      if (res.status === 201) {
+        navigate("/signin");
+      }
     } catch (err) {
       console.error(err);
-      setEmailErr(err.response.data.message)      
+      setEmailErr(err.response.data.message);
     }
   };
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
-      alert('이미 로그인 하셨습니다')
+      alert("이미 로그인 하셨습니다");
       navigate("/todo");
     }
   }, [navigate]);
