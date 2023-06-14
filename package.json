@@ -1,6 +1,6 @@
 {
   "name": "wanted-internship",
-  "homepage": "https://OHYOSUP.github.io/wanted-internship",
+  "homepage": "https://ohyosup.github.io/internship/",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8000/",
