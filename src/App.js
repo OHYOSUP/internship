@@ -11,9 +11,9 @@ function App() {
     <div className="w-[50vw] flex flex-col flex-center items-center">
       <Gnb />
       <Routes>
-        <Route path={process.env.PUBLIC_URL + "/signin"} element={<SignIn />} />
-        <Route path={process.env.PUBLIC_URL + "/signup"} element={<SignUp />} />
-        <Route path={process.env.PUBLIC_URL + "/todo"} element={<Todo />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/todo" element={<Todo />} />
       </Routes>
     </div>
   );
