@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/wanted-internship/static/css/main.b1e7c2e2.css",
+    "main.js": "/wanted-internship/static/js/main.0a83811c.js",
+    "index.html": "/wanted-internship/index.html",
+    "main.b1e7c2e2.css.map": "/wanted-internship/static/css/main.b1e7c2e2.css.map",
+    "main.0a83811c.js.map": "/wanted-internship/static/js/main.0a83811c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b1e7c2e2.css",
+    "static/js/main.0a83811c.js"
+  ]
+}
