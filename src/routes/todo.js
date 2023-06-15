@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "../apis/utils/instance";
-import TodoCard from "./TodoCard";
+import { apiAuthJSONInstance, apiClient } from "../apis/utils/instance";
+import TodoCard from "../components/TodoCard";
+import { getTodos } from "../apis/api/getTodo";
+import { createTodos } from "../apis/api/createTodo";
+import { deleteTodo } from "../apis/api/deletetodo";
 
 export default function Todo() {
   const [todoCard, setTodoCard] = useState([]);
@@ -10,17 +13,17 @@ export default function Todo() {
   const [newTodo, setNewTodo] = useState("");
   const navigate = useNavigate();
 
-
-
-
   const onChageNewTodo = (e) => {
     setNewTodo(e.target.value);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (newTodo.length === 0) {
+      alert("할 일을 입력하세요");
+    }
     try {
-      const res = await apiClient.post("todos", { todo: newTodo });      
+      const res = await createTodos({ todo: newTodo });
       if (res.status === 201) {
         const { id, todo, isCompleted } = res.data;
         const brandnewTodo = { id, todo, isCompleted };
@@ -39,8 +42,10 @@ export default function Todo() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await apiClient.get("todos");
-        setTodoCard(res.data);
+        const res = await getTodos();
+        if (res.status === 200) {
+          setTodoCard(res.data);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -61,7 +66,7 @@ export default function Todo() {
   const deleteTodoFn = async (e, id) => {
     e.preventDefault();
     try {
-      const res = await apiClient.delete(`todos/${id}`, id);
+      const res = await deleteTodo(id);
       if (res.status === 204) {
         let newTodo = todoCard.filter((todo) => todo.id !== id);
         setTodoCard(newTodo);
@@ -71,31 +76,30 @@ export default function Todo() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다");
       navigate("/signin");
     }
-  },[navigate])
+  }, [isLoggedIn, navigate]);
+
   return (
     <div className="flex flex-col items-center">
-      {isLoggedIn && (
-        <form onSubmit={onSubmit} className="gap-5 flex w-42">
-          <input
-            onChange={onChageNewTodo}
-            value={newTodo}
-            data-testid="new-todo-input"
-            placeholder="할 일을 입력하세요"
-            className="p-2 border-black border"
-          />
-          <button
-            className="bg-[#1D9BF0] w-30 rounded-md p-2 px-4 text-white font-bold"
-            data-testid="new-todo-add-button"
-          >
-            추가
-          </button>
-        </form>
-      )}
+      <form onSubmit={onSubmit} className="gap-5 flex w-42">
+        <input
+          onChange={onChageNewTodo}
+          value={newTodo}
+          data-testid="new-todo-input"
+          placeholder="할 일을 입력하세요"
+          className="p-2 border-black border"
+        />
+        <button
+          className="bg-[#1D9BF0] w-30 rounded-md p-2 px-4 text-white font-bold"
+          data-testid="new-todo-add-button"
+        >
+          추가
+        </button>
+      </form>
 
       <ul className="mt-10 flex flex-col gap-10">
         {todoCard?.map((todo) => (

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "../apis/utils/instance";
+import { apiClient, apiJSONInstance } from "../apis/utils/instance";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function SignUp() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await apiClient.post("auth/signup", {
+      const res = await apiJSONInstance.post("auth/signup", {
         email: email,
         password: password,
       });
@@ -47,7 +47,7 @@ export default function SignUp() {
       }
     } catch (err) {
       console.error(err);
-      setEmailErr(err.response.data.message);
+      
     }
   };
 

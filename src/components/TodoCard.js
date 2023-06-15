@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { apiClient } from "../apis/utils/instance";
+import { editTodo } from "../apis/api/editTodo";
 
 function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
   const [editedTodo, setEditedTodo] = useState(todo.todo);
@@ -14,7 +14,7 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
     const { id, todo: editedTodo } = todo;
     const updatedTodo = { todo: editedTodo, isCompleted: e.target.checked };
     try {
-      const res = await apiClient.put(`todos/${id}`, updatedTodo);      
+      const res = await editTodo(id, updatedTodo);
       if (res.status === 200) {
         const { id, todo: editedTodo, isCompleted } = res.data;
         const newTodoData = { id, todo: editedTodo, isCompleted };
@@ -38,7 +38,8 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
     const { id, isCompleted } = todo;
     const updatedData = { todo: editedTodo, isCompleted };
     try {
-      const res = await apiClient.put(`todos/${id}`, updatedData);      
+      const res = await editTodo(id, updatedData);
+
       if (res.status === 200) {
         const { id, todo, isCompleted } = res.data;
         const updatedTodo = { id, todo, isCompleted };
@@ -49,9 +50,6 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
     }
     setToggleEdit(false);
   };
-
-
-
 
   return (
     <li className="w-[39vw] gap-5 rounded-md flex flex-col justify-around items-center bg-slate-200 p-5">
@@ -86,7 +84,10 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
         >
           수정
         </button>
-        <button onClick={deleteTodoFn} className="bg-[#1D9BF0] w-13 rounded-md p-2 px-2 text-white font-bold">
+        <button
+          onClick={deleteTodoFn}
+          className="bg-[#1D9BF0] w-13 rounded-md p-2 px-2 text-white font-bold"
+        >
           삭제
         </button>
       </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "../apis/utils/instance";
+import { apiClient, apiJSONInstance } from "../apis/utils/instance";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -35,10 +35,7 @@ export default function SignIn() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await apiClient.post("auth/signin", {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res = await apiJSONInstance.post("auth/signin", {
         email: email,
         password: password,
       });
