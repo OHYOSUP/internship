@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TodoCard from "../components/TodoCard";
 import { getTodos } from "../apis/api/getTodo";
@@ -26,7 +26,7 @@ export default function Todo() {
       if (res.status === 201) {
         const { id, todo, isCompleted } = res.data;
         const brandnewTodo = { id, todo, isCompleted };
-        setTodoCard([...todoCard, brandnewTodo]);
+        setTodoCard([brandnewTodo, ...todoCard]);
         setNewTodo("");
       }
     } catch (err) {
@@ -72,7 +72,17 @@ export default function Todo() {
       }
     } catch (err) {
       console.error(err);
-      alert(err.response.data.message)
+      alert(err.response.data.message);
+    }
+  };
+
+  const todoInputRef = useRef();
+  console.log(todoInputRef.current);
+
+  const onClick = () => {
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다");
+      navigate("/signin");
     }
   };
 
@@ -88,10 +98,12 @@ export default function Todo() {
       <form onSubmit={onSubmit} className="gap-5 flex w-42">
         <input
           onChange={onChageNewTodo}
+          onClick={onClick}
           value={newTodo}
           data-testid="new-todo-input"
           placeholder="할 일을 입력하세요"
           className="p-2 border-black border"
+          ref={todoInputRef}
         />
         <button
           className="bg-[#1D9BF0] w-30 rounded-md p-2 px-4 text-white font-bold"

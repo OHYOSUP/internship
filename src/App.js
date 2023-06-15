@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="w-[50vw] flex flex-col flex-center items-center">
       <Gnb />
+      <h1 className="font-bold text-3xl mb-20 mt-20">Your Todo List</h1>    
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
