@@ -14,8 +14,7 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
     const { id, todo: editedTodo } = todo;
     const updatedTodo = { todo: editedTodo, isCompleted: e.target.checked };
     try {
-      const res = await apiClient.put(`todos/${id}`, updatedTodo);
-      console.log(res.data);
+      const res = await apiClient.put(`todos/${id}`, updatedTodo);      
       if (res.status === 200) {
         const { id, todo: editedTodo, isCompleted } = res.data;
         const newTodoData = { id, todo: editedTodo, isCompleted };
@@ -39,8 +38,7 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
     const { id, isCompleted } = todo;
     const updatedData = { todo: editedTodo, isCompleted };
     try {
-      const res = await apiClient.put(`todos/${id}`, updatedData);
-      console.log(res.data);
+      const res = await apiClient.put(`todos/${id}`, updatedData);      
       if (res.status === 200) {
         const { id, todo, isCompleted } = res.data;
         const updatedTodo = { id, todo, isCompleted };

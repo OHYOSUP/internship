@@ -1,10 +1,8 @@
 import Gnb from "./components/gnb";
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from "react-router-dom";
 import SignIn from "./routes/signin";
 import SignUp from "./routes/signup";
 import Todo from "./components/todo";
-
-
 
 function App() {
   return (
