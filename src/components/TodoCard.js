@@ -39,7 +39,6 @@ function TodoCard({ todo, editedTodoFn, deleteTodoFn }) {
     const updatedData = { todo: editedTodo, isCompleted };
     try {
       const res = await editTodo(id, updatedData);
-
       if (res.status === 200) {
         const { id, todo, isCompleted } = res.data;
         const updatedTodo = { id, todo, isCompleted };

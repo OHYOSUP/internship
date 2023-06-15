@@ -13,25 +13,26 @@ export default function SignIn() {
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
   const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("access_token");
 
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
     if (!email.includes("@")) {
       setIsEmail(false);
-      setEmailErr('이메일에는 @이 들어가야합니다')
-    }else{
+      setEmailErr("이메일에는 @이 들어가야합니다");
+    } else {
       setIsEmail(true);
-      setEmailErr('')
+      setEmailErr("");
     }
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
-    if (password.length < 8) {      
+    if (password.length < 8) {
       setIsPassword(false);
-      setPasswordErr("비밀번호는 8자리 이상입니다")
-    }else{
+      setPasswordErr("비밀번호는 8자리 이상입니다");
+    } else {
       setIsPassword(true);
-      setPasswordErr("")
+      setPasswordErr("");
     }
   };
   const onSubmit = async (e) => {
@@ -46,20 +47,19 @@ export default function SignIn() {
       if (res.status === 200) {
         navigate("/todo");
       }
-
       return res.data;
     } catch (err) {
       console.error(err);
-      alert(err.response.data.message)
+      alert(err.response.data.message);
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("access_token")) {
+    if (isLoggedIn) {
       alert("이미 로그인 하셨습니다");
       navigate("/todo");
     }
-  }, [navigate]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <div>

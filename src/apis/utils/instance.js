@@ -3,12 +3,7 @@ import { BASE_URL, access_token } from "../constants";
 
 const token = localStorage.getItem(access_token);
 
-const axiosApi = () => {
-  const instance = axios.create({ baseURL: BASE_URL });
-  return instance;
-};
-
-const axiosJSONApi = () => {
+const apiClient = () => {
   const instance = axios.create({
     headers: {
       Authorization: `${token}`,
@@ -19,28 +14,21 @@ const axiosJSONApi = () => {
   return instance;
 };
 
-const accessTokenInjector = (config) => {
-const token = localStorage.getItem(access_token);
-
+const accessTokenInterceprors = (config) => {
+  const token = localStorage.getItem(access_token);
   if (token === null) {
-    throw new Error("no access token in localStorage");
+    throw new Error("로컬스토리지에 토큰이 존재하지 않습니다");
   }
   config.headers.Authorization = `${token}`;
   return config;
 };
 
-export const apiInstance = axiosApi();
-
-export const apiJSONInstance = axiosJSONApi();
-
-export const apiAuthInstance = axiosApi();
-apiAuthInstance.interceptors.request.use(accessTokenInjector);
-
-export const apiAuthJSONInstance = axiosJSONApi();
-apiAuthJSONInstance.interceptors.request.use(accessTokenInjector);
+export const apiJSONInstance = apiClient();
+export const apiAuthJSONInstance = apiClient();
+apiAuthJSONInstance.interceptors.request.use(accessTokenInterceprors);
 
 // export const apiClient = axios.create({
-//   headers: {  
+//   headers: {
 //     Authorization: `${token}`,
 //     "Content-Type": "application/json",
 //   },

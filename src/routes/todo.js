@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiAuthJSONInstance, apiClient } from "../apis/utils/instance";
 import TodoCard from "../components/TodoCard";
 import { getTodos } from "../apis/api/getTodo";
 import { createTodos } from "../apis/api/createTodo";
@@ -73,6 +72,7 @@ export default function Todo() {
       }
     } catch (err) {
       console.error(err);
+      alert(err.response.data.message)
     }
   };
 

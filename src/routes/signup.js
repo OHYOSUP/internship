@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiClient, apiJSONInstance } from "../apis/utils/instance";
+import { apiJSONInstance } from "../apis/utils/instance";
 
 export default function SignUp() {
   const navigate = useNavigate();
