@@ -79,26 +79,18 @@ export default function Todo() {
   const todoInputRef = useRef();
   console.log(todoInputRef.current);
 
-  const onClick = () => {
+  useEffect(() => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다");
       navigate("/signin");
     }
-  };
-
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     alert("로그인이 필요합니다");
-  //     navigate("/signin");
-  //   }
-  // }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <div className="flex flex-col items-center">
       <form onSubmit={onSubmit} className="gap-5 flex w-42">
         <input
-          onChange={onChageNewTodo}
-          onClick={onClick}
+          onChange={onChageNewTodo}          
           value={newTodo}
           data-testid="new-todo-input"
           placeholder="할 일을 입력하세요"
