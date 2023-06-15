@@ -76,12 +76,12 @@ export default function Todo() {
     }
   };
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      alert("로그인이 필요합니다");
-      navigate("/signin");
-    }
-  }, [isLoggedIn, navigate]);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     alert("로그인이 필요합니다");
+  //     navigate("/signin");
+  //   }
+  // }, [isLoggedIn, navigate]);
 
   return (
     <div className="flex flex-col items-center">
