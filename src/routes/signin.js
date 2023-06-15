@@ -17,19 +17,21 @@ export default function SignIn() {
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
     if (!email.includes("@")) {
-      setEmailErr("이메일을 확인해주세요");
       setIsEmail(false);
-    } else {
+      setEmailErr('이메일에는 @이 들어가야합니다')
+    }else{
       setIsEmail(true);
+      setEmailErr('')
     }
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
-    if (password.length < 8) {
-      setPasswordErr("비밀번호는 8자리 이상입니다");
+    if (password.length < 8) {      
       setIsPassword(false);
-    } else {
+      setPasswordErr("비밀번호는 8자리 이상입니다")
+    }else{
       setIsPassword(true);
+      setPasswordErr("")
     }
   };
   const onSubmit = async (e) => {
@@ -44,9 +46,11 @@ export default function SignIn() {
       if (res.status === 200) {
         navigate("/todo");
       }
+
       return res.data;
     } catch (err) {
       console.error(err);
+      alert(err.response.data.message)
     }
   };
 
@@ -83,6 +87,7 @@ export default function SignIn() {
           onChange={onChangePassword}
           className="w-80 p-3 rounded-md border border-black"
         />
+        {passwordErr && <p>{passwordErr}</p>}
         <button
           data-testid="signin-button"
           className="bg-[#1D9BF0] w-30 rounded-md p-4 text-white font-bold"

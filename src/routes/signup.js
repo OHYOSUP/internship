@@ -18,10 +18,10 @@ export default function SignUp() {
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
     if (!email.includes("@")) {
-      setEmailErr("이메일을 확인해주세요");
+      setEmailErr("이메일에는 @이 들어갸아 합니다");
       setIsEmail(false);
     } else {
-      setEmailErr("사용 가능한 이메일입니다");
+      setEmailErr("");
       setIsEmail(true);
     }
   };
@@ -31,7 +31,7 @@ export default function SignUp() {
       setPasswordErr("비밀번호는 8자리 이상입니다");
       setIsPassword(false);
     } else {
-      setPasswordErr("사용 가능한 비밀번호 입니다.");
+      setPasswordErr("");
       setIsPassword(true);
     }
   };
@@ -47,7 +47,7 @@ export default function SignUp() {
       }
     } catch (err) {
       console.error(err);
-      
+      alert(err.response.data.message);
     }
   };
 
@@ -84,6 +84,7 @@ export default function SignUp() {
           onChange={onChangePassword}
           className="w-80 p-3 rounded-md border border-black"
         />
+        {passwordErr && <p>{passwordErr}</p>}
         <button
           data-testid="signup-button"
           className="bg-[#1D9BF0] w-30 rounded-md p-4 text-white font-bold"
